@@ -13,6 +13,9 @@ For those resources (slides, starter code for assingments, etc) you can go here 
 http://web.stanford.edu/class/cs106b/
 
 Archived Classes
+
 Spring 2019: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1196/
+
 Spring 2015: http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1154/
+
 Spring 2013: http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1136/
