@@ -1,0 +1,110 @@
+// TODO: Write a comment header here with your name and assignment number.
+
+// TODO: Write your functions in this file.
+
+
+#include <cctype>      // for tolower, etc.
+#include <iostream>    // for cout, endl
+#include <string>      // for string class
+#include "map.h"
+#include "queue.h"
+#include "set.h"
+#include "stack.h"
+#include "strlib.h"    // Stanford string functions
+using namespace std;
+
+
+// TODO: implement this function
+void collapse(Stack<int>& stack) {
+    Stack<int> ph;
+    int size = stack.size();
+
+    // doesn't collapse correctly for odd-numbered stacks. need the last element on stack to not be combined
+        // used if statement to correct - probably a better/more efficient way
+
+    if (size % 2 == 0) {
+        for (int i=0; i <= size/2; i++) {
+            int element1 = stack.pop();
+            int element2;
+            if (!stack.isEmpty()) {
+                element2 = stack.pop();
+            } else {
+                element2 = 0;
+            }
+
+            int combinedElement = element1 + element2;
+
+            ph.push(combinedElement);
+        }
+    } else {
+        for (int i=0; i <= size/2; i++) {
+            int element1;
+            int element2;
+            int combinedElement;
+            if (i==0) {
+                element1 = stack.pop();
+                element2 = 0;
+            } else {
+                element1 = stack.pop();
+                if (!stack.isEmpty()) {
+                    element2 = stack.pop();
+                } else {
+                    element2 = 0;
+                }
+            }
+
+            combinedElement = element1 + element2;
+
+            ph.push(combinedElement);
+        }
+    }
+
+    size = ph.size();
+
+    for (int i=0; i < size; i++) {
+        int curr = ph.pop();
+        stack.push(curr);
+    }
+
+}
+
+// TODO: implement this function
+char mostCommonFirstChar(Set<string>& set) {
+//    int size = set.size();
+    Map<char, int> firstLetters;
+
+    Set<string>::iterator it;
+    for (it = set.begin(); it != set.end(); ++it) {
+        string word = *it;
+        char letter = toLowerCase(word[0]);
+        if (firstLetters.containsKey(letter)) {
+            firstLetters[letter]++;
+        } else {
+            firstLetters.add(letter, 1);
+        }
+    }
+
+    Map<char, int>::iterator mapIter;
+    char mostFrequentChar;
+    int maxCount = 0;
+    for (mapIter = firstLetters.begin(); mapIter != firstLetters.end(); ++mapIter) {
+        char letter = *mapIter;
+        int letterCount = firstLetters[letter];
+
+        if (letterCount > maxCount) {
+            mostFrequentChar = letter;
+            maxCount = letterCount;
+        } else if (letterCount == maxCount) {
+            if (letter > mostFrequentChar) {
+                mostFrequentChar = letter;
+                maxCount = letterCount;
+            }
+        }
+    }
+
+    if (mostFrequentChar != NULL) {
+        return mostFrequentChar;
+    } else {
+        return '?';
+    }
+}
