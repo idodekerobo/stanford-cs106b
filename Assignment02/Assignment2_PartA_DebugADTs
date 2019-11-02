@@ -1,0 +1,165 @@
+/**
+ * CS 106B, Homework 2, Debugging
+ *
+ * This project is provided as part of an exercise to practice using a
+ * debugger. This program has buggy client use of the collection ADTs.
+ *
+ * @author Julie Zelenski and Marty Stepp
+ * @version 2019/04/13
+ * - initial 19sp version
+ */
+
+#include <cctype>      // for isupper
+#include <iostream>    // for cout, endl
+#include <string>      // for string class
+#include "console.h"   // for graphical console
+#include "simpio.h"    // for getLine
+#include "stack.h"
+#include "strlib.h"    // string functions
+#include "queue.h"
+using namespace std;
+
+// function prototypes
+void compressDups(Vector<char>& v);
+void compressDupsTest();
+void intro();
+void menu();
+void stutterUpper(Queue<char>& q);
+void stutterUpperTest();
+void reverse(Queue<int>& q);
+void reverseTest();
+
+#include "set.h"
+
+int main() {
+    intro();
+    menu();
+    cout << "All done!" << endl;
+    return 0;
+}
+
+// Prints a welcome message to introduce the program.
+void intro() {
+    cout << "Welcome to the CS 106B ADT debugging exercise." << endl;
+    cout << "WARNING: this program is buggy and needs your help!" << endl;
+    cout << "Your SUNetID (such as jsmith12 or klui) will be used" << endl;
+    cout << "to help customize the output for each student." << endl;
+    cout << endl;
+}
+
+void menu() {
+    int choice = -1;
+    while (choice != 0) {
+        cout << "1) SUNetID reverse" << endl;
+        cout << "2) stutterUpper test" << endl;
+        cout << "3) compressDups test" << endl;
+        cout << "0) quit" << endl;
+        choice = getIntegerBetween("Your choice? ", 0, 3);
+        cout << endl;
+
+        if (choice == 1) {
+            reverseTest();
+        } else if (choice == 2) {
+            stutterUpperTest();
+        } else if (choice == 3) {
+            compressDupsTest();
+        }
+    }
+}
+
+// This function modifies a queue to reverse the order of its elements.
+void reverse(Queue<char>& q) {
+    Stack<char> s;
+    while (!q.isEmpty()) {
+        char ch = q.dequeue();
+        s.push(ch);
+    }
+    while (!s.isEmpty()) {
+        char ch = s.pop();
+        q.enqueue(ch);
+    }
+}
+
+// This function is intended to modify a queue of characters to duplicate
+// any uppercase letters.
+// WARNING: the given code is buggy. See exercise writeup for more
+// information on how to test and diagnose.
+void stutterUpper(Queue<char>& q) {
+    Queue<char> ph;
+    int length = q.size();
+    for (int i = 0; i < length; i++) {
+        char cur = q.dequeue();
+        q.enqueue(cur);
+        if (isupper(cur)) {
+            q.enqueue(cur);   // double up on uppercase
+        }
+    }
+
+}
+
+// This function is intended to modify a vector of chars to compress
+// each sequence of duplicates into one occurrence.
+// WARNING: the given code is buggy. See exercise writeup for more
+// information on how to test and diagnose.
+void compressDups(Vector<char>& v) {
+    for (int i = 1; i < v.size(); i++) {
+        if (v[i - 1] == v[i]) { // change from a while loop to just an if statement
+            v.remove(i);   // remove each neighboring duplicate
+        }
+    }
+}
+
+// Prompts for values to use to test the reverse function.
+void reverseTest() {
+    cout << "Let's reverse a queue." << endl;
+    string sunetid = getLine("What is your SUNetID? ");
+    if (sunetid.empty()) {
+        return;
+    }
+    Queue<char> q;
+    for (char ch : sunetid) {
+        q.enqueue(ch);
+    }
+    cout << "Queue before = " << q << endl;
+    reverse(q);
+    cout << "Queue after  = " << q << endl;
+    cout << endl;
+}
+
+// Prompts for values to use to test the stutterUpper function.
+void stutterUpperTest() {
+    cout << "Now let's try a queue of characters." << endl;
+    while (true) {
+        string name = getLine("Enter name to stutter uppercase (Enter to stop): ");
+        if (name.empty()) {
+            break;
+        }
+        Queue<char> q;
+        for (char ch : name) {
+            q.enqueue(ch);
+        }
+        cout << "Before = " << q << endl;
+        stutterUpper(q);
+        cout << "After  = " << q << endl;
+    }
+    cout << endl;
+}
+
+// Prompts for values to use to test the compressDups function.
+void compressDupsTest() {
+    cout << "Now let's try a vector." << endl;
+    while (true) {
+        string name = getLine("Enter word to compress duplicates (Enter to stop): ");
+        if (name.empty()) {
+            break;
+        }
+        Vector<char> s;
+        for (char ch : name) {
+            s.add(ch);
+        }
+        cout << "Before = " << s << endl;
+        compressDups(s);
+        cout << "After  = " << s << endl;
+    }
+    cout << endl;
+}
