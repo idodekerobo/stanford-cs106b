@@ -1,0 +1,157 @@
+// This is the CPP file you will edit and turn in. (TODO: Remove this comment!)
+
+#include <iostream>
+#include <fstream>
+#include "console.h"
+#include "vector.h"
+#include "map.h"
+#include "random.h"
+#include "tokenscanner.h"
+using namespace std;
+
+Map<Vector<string>, Vector<string>> wordMap;
+
+int GetN();
+int GetNumWords();
+void ReadFile(int ngram);
+Vector<string> ChooseRandomElement(Map<Vector<string>, Vector<string>> &map);
+void AddWordsToString(int nGrams, Vector<string> &startingVector, Vector<string> &finalStringVector, int remainingWordsToAdd);
+string PrintFinalString(Vector<string> &finalStringVector);
+string BuildRandomString(int nGrams, Vector<string> &startingVector, int nWords);
+
+int main() {
+
+    int n = GetN();
+    int nWords = GetNumWords();
+    ReadFile(n);
+    Vector<string> startingVector = ChooseRandomElement(wordMap);
+
+    cout << BuildRandomString(n, startingVector, nWords) << endl;
+    cout << "fin." << endl;
+
+    return 0;
+}
+
+int GetN() {
+    cout << "What is the value of n? ";
+    int n;
+    cin >> n;
+    while (cin.fail() || n == 1) {
+        cin.clear();
+        cin.ignore();
+        cout << "That is not a valid number. Please re-enter n. N also has to be more than 1. ";
+        cin >> n;
+    }
+
+    return n;
+}
+
+int GetNumWords() {
+    cout << "How many words will you like to build? ";
+    int nWords;
+    cin >> nWords;
+    while (cin.fail()) {
+        cin.clear();
+        cin.ignore();
+        cout << "That is not a valid number. Please re-enter number of words. ";
+        cin >> nWords;
+    }
+
+    return nWords;
+}
+
+void ReadFile(int ngram) {
+    ifstream in;
+//    in.open(filename);
+    in.open("/Users/idodekerobo/Documents/baby\ mogul/Young\ Zuckerberg/CS106B/Lecture\ 6/Ngrams/res/constitution.txt");
+
+    Vector<string> keys;
+    Vector<string> values;
+    Vector<string> wordList;
+    string word;
+    in >> word;
+    while (!in.fail()) {
+        wordList.add(word);
+        in >> word;
+    }
+
+    int size = wordList.size();
+    for (int i=0; i < wordList.size(); i++) {
+        for (int j=0; j < ngram; j++) {
+            if (j < (ngram-1)) {
+                keys.add(wordList[ (i+j) % size ]);
+            } else {
+                values.add(wordList[ (i+j) % size ]);
+            }
+        }
+        if (!wordMap.containsKey(keys)) {
+            wordMap.add(keys, values);
+        } else {
+            wordMap[keys].add(values[0]);
+        }
+        keys.clear();
+        values.clear();
+    }
+}
+
+Vector<string> ChooseRandomElement(Map<Vector<string>, Vector<string>> &map) {
+    Vector<Vector<string>> theKeys = map.keys();
+    int size = theKeys.size();
+    int randomKeyIndex = randomInteger(0, size);
+
+    Vector<string> randomKey = theKeys[randomKeyIndex];
+
+    return randomKey;
+}
+
+void AddWordsToString(int nGrams, Vector<string> &startingVector, Vector<string> &finalStringVector, int remainingWordsToAdd) {
+    // take key and return options
+    Vector<string> nextWordList = wordMap.get(startingVector);
+
+    for (int i=0; i < remainingWordsToAdd; i++) {
+        // pass options to function that chooses a new word and add it to final string vector
+        int nextWordListSize = nextWordList.size();
+        int randomNextWordIndex;
+        randomNextWordIndex = randomInteger(0, nextWordListSize); // for some reason returns a number that is nextWordListSize instead of behavior as half open
+        while (randomNextWordIndex >= nextWordListSize) {
+            randomNextWordIndex = randomInteger(0, nextWordListSize); // buggy because some time it takes an index outside the bounds. try and reassign if thats the case using the while loop
+        }
+        string randomNextWord = nextWordList[randomNextWordIndex];
+        finalStringVector.add(randomNextWord);
+
+        // add final n-1 elements from final vector to newStartingVector
+        Vector<string> newStartingVector;
+        int finalVecSize = finalStringVector.size();
+        for (int i=finalVecSize-(nGrams-1); i < finalVecSize; i++) {
+            newStartingVector.add(finalStringVector[i]);
+        }
+        //reset nextWordList to new starting Vector and take new key to return new options
+        nextWordList = wordMap.get(newStartingVector);
+    }
+}
+
+string PrintFinalString(Vector<string> &finalStringVector) {
+    string finalString = "";
+    for (int i=0; i < finalStringVector.size(); i++) {
+        finalString += finalStringVector[i] + " ";
+    }
+    return finalString;
+}
+
+string BuildRandomString(int nGrams, Vector<string> &startingVector, int nWords) {
+
+    Vector<string> finalStringVector;
+
+    // add starting vector components to final vector
+    // save key as final string vector
+    for (int i=0; i < startingVector.size(); i++) {
+        finalStringVector.add(startingVector[i]);
+    }
+
+    // how many words remaining to add
+    int remainingWordsToAdd = nWords - finalStringVector.size();
+
+    AddWordsToString(nGrams, startingVector, finalStringVector, remainingWordsToAdd);
+
+    return PrintFinalString(finalStringVector);
+}
