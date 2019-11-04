@@ -16,6 +16,16 @@ Archived Classes
 
 Spring 2019: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1196/
 
+Spring 2017: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1174/
+
+Spring 2015-2016: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1166/index.html
+
+Fall 2016: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1172/
+
+Autumn 2015: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1162/index.shtml
+
 Spring 2015: http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1154/
 
 Spring 2013: http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1136/
+
+Full Archive: http://www.keithschwarz.com/cs106b/
