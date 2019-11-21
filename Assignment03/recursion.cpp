@@ -44,6 +44,7 @@ void serpinskii(GWindow &w, int leftX, int leftY, int size, int order) {
     cout << "[recursion serpinskii called]" << endl;
 }
 
+// incomplete - image properties not working
 int doFloodFill(GBufferedImage& image, int x, int y, int newColor) {
     int number = 0;
     int originalColor = image.getRGB(x, y);
