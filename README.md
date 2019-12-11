@@ -20,7 +20,7 @@ Spring 2017: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1174/
 
 Spring 2015-2016: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1166/index.html
 
-Fall 2016: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1172/
+Fall 2016 (doesn't require Stanford login to access resources): https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1172/
 
 Autumn 2015: https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1162/index.shtml
 
